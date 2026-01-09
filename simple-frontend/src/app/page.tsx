@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 
 export default function Home() {
   // --- Form State ---
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     englishName: '',
     spanishName: '',
     englishIngredientList: '',
@@ -17,9 +17,17 @@ export default function Home() {
     isVegetarian: false,
     structuredIngredients: [], // Array of objects { refId, amount, unit }
     structuredAppliances: []   // Array of strings (refIds)
-  });
+  };
+  const [formData, setFormData] = useState(initialFormState);
 
   const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  
+  const clearForm = () => {
+    setFormData(initialFormState);
+    // Optional: If you have temporary modal state that might be lingering, reset that too
+    setNewIngredient({ refId: '', amount: '', unit: '' });
+    setNewAppliance('');
+  };
 
   // --- Modal State & Refs ---
   const ingredientModalRef = useRef(null);
@@ -79,7 +87,7 @@ export default function Home() {
       if (!res.ok) throw new Error('Failed to submit');
 
       setStatus('success');
-      // Optional: Reset form here if desired
+      clearForm();
       setTimeout(() => setStatus('idle'), 3000);
     } catch (error) {
       console.error(error);
@@ -283,8 +291,16 @@ export default function Home() {
               </div>
             </fieldset>
           </div>
-
-          <div className="justify-end card-actions mt-4">
+          <div className="justify-start card-actions">
+            <button 
+              className="btn btn-warning" 
+              onClick={clearForm}
+              disabled={status === 'loading'}
+            >
+              {status === 'loading' ? 'clearing...' : 'Clear form'}
+            </button>
+          </div>
+          <div className="justify-end card-actions">
             <button 
               className="btn btn-primary" 
               onClick={handleSubmit}

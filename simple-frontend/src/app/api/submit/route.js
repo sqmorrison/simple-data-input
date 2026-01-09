@@ -1,11 +1,14 @@
-import dbConnect from '@/lib/db';
-import Recipe from '@/models/Recipe'; // Ensure this path matches where you saved your schema
+import dbConnect from '../../lib/db';
+import Recipe from '../../models/entry'; // Ensure this path matches where you saved your schema
 import { NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 
 export async function POST(req) {
   try {
     // 1. Connect to Database
     await dbConnect();
+    
+    console.log("Writing to Database:", mongoose.connection.name);
 
     // 2. Parse the incoming JSON from the frontend
     const body = await req.json();
@@ -24,8 +27,8 @@ export async function POST(req) {
       // Note: Your frontend didn't have an "Instructions" field yet, 
       // so we leave this empty or you can add inputs for it later.
       instructions: {
-        en: "", 
-        es: "",
+        en: body.englishInstructionList, 
+        es: body.spanishInstructionList,
       },
       imageURI: body.imageLink,
       tags: {
@@ -40,7 +43,7 @@ export async function POST(req) {
         unit: ing.unit,
       })),
       // Map the array of strings
-      appliances: body.structuredAppliances, 
+      appliances: body.structuredAppliances
     };
 
     // 4. Create and Save
