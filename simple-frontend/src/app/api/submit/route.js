@@ -43,7 +43,8 @@ export async function POST(req) {
         unit: ing.unit,
       })),
       // Map the array of strings
-      appliances: body.structuredAppliances
+      appliances: body.structuredAppliances,
+      totalCost: 0
     };
 
     // 4. Create and Save

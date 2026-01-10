@@ -21,7 +21,7 @@ const recipeSchema = new mongoose.Schema({
     },
     ingredients: [
         {
-            ingredient: { type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient', required: true },
+            ingredient: { type: mongoose.Schema.Types.ObjectId, ref: 'ingredients', required: true },
             amount: Number,
             unit: String
         },
@@ -29,7 +29,7 @@ const recipeSchema = new mongoose.Schema({
     appliances: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Appliance'
+            ref: 'appliances'
         },
     ],
     totalCost: Number,
